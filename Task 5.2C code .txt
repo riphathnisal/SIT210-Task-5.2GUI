@@ -1,0 +1,51 @@
+from tkinter import *
+import tkinter.font
+from gpiozero import PWMLED
+from gpiozero import LED
+
+
+
+##Hardware##
+ledGreen = PWMLED(17)
+ledBlue = PWMLED(22)
+ledRed = PWMLED(27)
+
+
+##Create GUI##
+win = Tk()
+win.title("LED Intensity Control")
+myFont = tkinter.font.Font(family='Helvetica' ,size=12, weight="bold")
+
+##Function to update LED intensity based on slider value##
+def update_led_green(value):
+    ledGreen.value = float(value)
+def update_led_blue(value):
+    ledBlue.value = float(value)
+def update_led_red(value):
+    ledRed.value = float(value)
+
+def exitToggle():
+    ledGreen.close()
+    ledBlue.close()
+    ledRed.close()
+    win.destroy()
+
+
+##LED Sliders##
+ledGreen_slider = Scale(win, from_=0, to=1, resolution=0.01, label = "Green LED")
+ledGreen_slider.pack()
+ledBlue_slider = Scale(win, from_=0, to=1, resolution=0.01, label="Blue LED")
+ledBlue_slider.pack()
+ledRed_slider = Scale(win, from_=0, to=1, resolution=0.01, label="Red LED")
+ledRed_slider.pack()
+
+##COMBINE EVENTS##
+ledGreen_slider.bind("<Motion>",lambda event:update_led_green(ledGreen_slider.get()))
+ledBlue_slider.bind("<Motion>", lambda event:update_led_blue(ledBlue_slider.get()))
+ledRed_slider.bind("<Motion>", lambda event:update_led_red(ledRed_slider.get()))
+
+##Update button##
+exitButton = Button(win,text="EXIT", command=exitToggle, bg='bisque2', height = 2, width=35)
+exitButton.pack()
+
+win.mainloop()
